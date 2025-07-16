@@ -21,10 +21,14 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.ServletResolverConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.aem.guides.wknd.core.config.LoginServletConfig;
 import com.google.gson.JsonObject;
 
 @Component(
@@ -36,10 +40,20 @@ import com.google.gson.JsonObject;
         "service.vendor=" + "WKND"
     }
 )
+@Designate(ocd = LoginServletConfig.class)
 public class LoginServlet extends SlingAllMethodsServlet {
 
     private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
     private static final long serialVersionUID = 1L;
+    
+    private String configuredLoginUrl;
+
+    @Activate
+    @Modified
+    protected void activate(LoginServletConfig config) {
+        this.configuredLoginUrl = config.loginUrl();
+        log.info("LoginServlet configured with login URL: {}", this.configuredLoginUrl);
+    }
 
     @Override
     protected void doPost(final SlingHttpServletRequest request, final SlingHttpServletResponse response)
@@ -67,8 +81,17 @@ public class LoginServlet extends SlingAllMethodsServlet {
         username = username.trim();
         password = password.trim();
 
-        String loginUrl = request.getScheme() + "://" + request.getServerName() + ":" +
-                          request.getServerPort() + "/j_security_check";
+        // Use configured login URL or fallback to dynamic construction
+        String loginUrl;
+        if (configuredLoginUrl != null && !configuredLoginUrl.trim().isEmpty()) {
+            loginUrl = configuredLoginUrl;
+        } else {
+            // Fallback to dynamic construction
+            loginUrl = request.getScheme() + "://" + request.getServerName() + ":" +
+                      request.getServerPort() + "/j_security_check";
+        }
+
+        log.debug("Using login URL: {}", loginUrl);
 
         HttpPost loginPost = new HttpPost(loginUrl);
         List<BasicNameValuePair> formParams = new ArrayList<>();
