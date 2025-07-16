@@ -20,6 +20,7 @@ $include "./default_filters.any"
 
 #Allow logout path
 /0112 { /type "allow" /method "POST" /url "/system/sling/logout" }
+/0113 { /type "allow" /method "GET" /url "/system/sling/logout" }
 
 # Allow GraphQL global endpoint & preflight requests
 # GraphQL also supports GET requests, if you intend to use GET include it in the rule below
@@ -36,3 +37,8 @@ $include "./default_filters.any"
 # ContextHub
 /0200 { /type "allow" /url "*/contexthub.pagedata.json" }
 /0201 { /type "allow" /url "/home/users/*.infinity.json" }
+
+#Allow login Servlet path
+/1112 { /type "allow" /method "POST" /url "/bin/wknd/login" }
+
+/1113 { /type "allow" /method "POST" /url "/j_security_check" }
