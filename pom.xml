@@ -42,7 +42,8 @@
         <module>ui.content</module>
         <module>ui.content.sample</module>
         <module>it.tests</module>
-        <module>dispatcher</module>
+        <!-- dispatcher module excluded: managed at parent repo level -->
+        <!-- <module>dispatcher</module> -->
         <module>ui.tests</module>
     </modules>
 
