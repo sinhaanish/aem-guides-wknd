@@ -1,14 +1,22 @@
 {
     "alloworigin":[
-      ""
+      "https://experience.adobe.com",
+      "https://universal-editor-service.adobe.io",
+      "https://644509-wkndheadlessreact-stage.adobeio-static.net",
+      "http://localhost:3000"
     ],
     "alloworiginregexp":[
-      "http://localhost:.*"
+      "http://localhost:.*",
+      "https://.*\\.adobeio-static\\.net",
+      "https://.*\\.adobeioruntime\\.net"
     ],
     "allowedpaths": [
       "/graphql/execute.json.*",
       "/content/_cq_graphql/wknd-shared/endpoint.json",
-      "/content/experience-fragments/.*"
+      "/content/experience-fragments/.*",
+      "/content/dam/.*",
+      "/conf/.*",
+      "/libs/granite/csrf/token.json"
     ],
     "supportedheaders": [
       "Origin",
@@ -22,7 +30,10 @@
     "supportedmethods":[
       "GET",
       "HEAD",
-      "POST"
+      "POST",
+      "PUT",
+      "DELETE",
+      "OPTIONS"
     ],
     "maxage:Integer": 1800,
     "supportscredentials": true,
